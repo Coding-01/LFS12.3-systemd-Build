@@ -1,5 +1,3 @@
-[toc]
-
 
 [官方文档](https://linuxfromscratch.org/lfs/read.html)
 [中文文档](https://lfs.xry111.site/zh_CN/13.0-systemd/)
@@ -334,7 +332,7 @@ rambo@ub24-1:~$ sudo mkdir $LFS/sources && sudo chmod  a+wt $LFS/sources
 rambo@ub24-1:~$ cd $LFS/sources/
 
 # ================== 这部分不在官方文档中 ================================
-# 需要单独下载的包
+# 需要单独下载的包，这2个包是为安装openssh
 rambo@ub24-1:/mnt/lfs/sources$ wget https://mirrors.aliyun.com/openssh/portable/openssh-10.1p1.tar.gz \
 https://www.thrysoee.dk/editline/libedit-20251016-3.1.tar.gz
 
