@@ -2720,7 +2720,7 @@ userdel: zhangsan mail spool (/var/mail/zhangsan) not found
 2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
     link/ether 00:0c:29:93:90:28 brd ff:ff:ff:ff:ff:ff
     altname enp2s1
-    inet 172.16.186.128/24 brd 172.16.186.255 scope global dynamic noprefixroute ens33
+    inet 172.16.186.141/24 brd 172.16.186.255 scope global dynamic noprefixroute ens33
        valid_lft 1449sec preferred_lft 1449sec
     inet6 fe80::20c:29ff:fe93:9028/64 scope link proto kernel_ll 
        valid_lft forever preferred_lft forever
@@ -2740,7 +2740,13 @@ Name=ens33
 [Network]
 DHCP=ipv4
 
-
+注意: dhcp和静态IP可以同时存在，但(1)文件名的开头不要相同，在systemd-networkd中文件是按文件名字符顺序加载的，并且一旦匹配到网卡名称，后续的逻辑可能会发生冲突或叠加
+为什么155没生效？
+原因主要有两个：
+(1) 文件冲突：你同时拥有 10-eth-dhcp.network 和 10-eth-static.network。由于它们都匹配 Name=ens33，systemd-networkd 可能同时启动了 DHCP 客户端并尝试设置静态地址。在很多情况下，DHCP获取到的地址会覆盖或与静态地址共存，但你的DHCP显然先拿到了172.16.186.141
+(2) 加载顺序：两个文件名都以 10- 开头，加载顺序是不确定的
+你不能同时保留这两份文件，除非你希望在 DHCP 失败时回退到静态（那需要更复杂的配置）
+# ===============================================================================
 # 编写静态IP配置
 (lfs chroot) root:/usr/lib# vim /etc/systemd/network/10-eth-static.network
 [Match]
@@ -2752,11 +2758,19 @@ Gateway=172.16.186.2
 DNS=172.16.186.2
 Domains=172.16.186.2
 
+注意：
+如果需要使用静态IP则需要把静态文件名改成比如10-eth-static.network.bak,只留下10-eth-dhcp.network
+如果2个文件都使用则需要把名字改成比如10-eth-static.network 和 20-eth-dhcp.network，这样会优先使用静态IP,如果静态IP配错/异常则会退而求其次使用dhcp获取IP,比如:
+root@lfs:~$ mv /etc/systemd/network/10-eth-dhcp.network  /etc/systemd/network/20-eth-dhcp.network
+root@lfs:~$ systemctl restart systemd-networkd
+此时IP就会变成手动配置的那个静态IP(即.155)
+
+# ===============================================================================
 
 
 2. 为什么你在 chroot 里看到的是“借来的”网络？
-在 Linux 中，网络接口是由内核管理的。由于 chroot 只是改变了进程看到的根目录，并没有隔离内核空间，所以：
-宿主机 Ubuntu 的内核已经驱动了 ens33
+在Linux中，网络接口是由内核管理的。由于chroot只是改变了进程看到的根目录，并没有隔离内核空间，所以：
+宿主机 Ubuntu 的内核已经驱动了ens33
 宿主机的 systemd-networkd 或 NetworkManager 已经完成了 DHCP 握手
 你在 chroot 里执行 ip a，其实是在查看宿主机内核的状态
 
