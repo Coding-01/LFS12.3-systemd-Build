@@ -3481,14 +3481,14 @@ root@ub24-1:/# reboot
 
 # ==========================================================
 ```
-![image](https://img2024.cnblogs.com/blog/1139005/202604/1139005-20260422195624431-1101915318.png)
-![image](https://img2024.cnblogs.com/blog/1139005/202604/1139005-20260422195859472-1927035285.png)
-![image](https://img2024.cnblogs.com/blog/1139005/202604/1139005-20260424104124565-1675093276.png)
-![image](https://img2024.cnblogs.com/blog/1139005/202604/1139005-20260424104422848-1176845809.png)
+![image](https://github.com/Coding-01/LFS12.3-systemd-Build/blob/main/images/1.png)
+![image](https://github.com/Coding-01/LFS12.3-systemd-Build/blob/main/images/2.png)
+![image](https://github.com/Coding-01/LFS12.3-systemd-Build/blob/main/images/3.png)
+![image](https://github.com/Coding-01/LFS12.3-systemd-Build/blob/main/images/4.png)
 ```shell
 root / A星
 zhangsan / 6a
 
 ```
-![image](https://img2024.cnblogs.com/blog/1139005/202604/1139005-20260424105857465-2050783408.png)
+![image](https://github.com/Coding-01/LFS12.3-systemd-Build/blob/main/images/5.png)
 
