@@ -1002,24 +1002,6 @@ alias ll='ls -l'
 EOF
 
 
-# 设置全局 profile (所有用户登录的入口)
-(lfs chroot) I have no name!:/# cat > /etc/profile << "EOF"
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
-fi
-EOF
-
-# 设置 root 用户的个人配置
-(lfs chroot) I have no name!:/# cat > /root/.bash_profile << "EOF"
-if [ -f /etc/bashrc ]; then
-  . /etc/bashrc
-fi
-EOF
-
-
--bash-5.2# source ~/.bash_profile
-
-
 Linux 系统中的用户组和 GID 并没有统一的强制标准，而是由实际需求（如 Udev 配置）、发行版惯例以及测试环境共同决定。
 Linux Standard Base 仅建议必须存在 root（GID=0）和 bin（GID=1）两个组，像 tty（GID=5）这样的分配属于常见约定（在 systemd 中也有使用），但并非强制。
 除此之外，组名和 GID 可以由管理员自由设定，规范的软件应依赖组名而非数字ID。内核使用 65534 表示未映射的用户或组，通常对应 nobody/nogroup，但不同发行版实现可能不同，
@@ -1069,14 +1051,12 @@ Gettext 软件包包含用于国际化和本地化的实用程序。这些实用
 (lfs chroot) root:/sources# rm -rf gettext-0.24
 
 
-
 # bison-3.8.2
 (lfs chroot) root:/sources# tar xvf bison-3.8.2.tar.xz
 (lfs chroot) root:/sources# cd bison-3.8.2 
 (lfs chroot) root:/sources/bison-3.8.2# ./configure --prefix=/usr --docdir=/usr/share/doc/bison-3.8.2 && make -j$(nproc) && make install
 (lfs chroot) root:/sources/bison-3.8.2# cd ..
 (lfs chroot) root:/sources# rm -rf bison-3.8.2
-
 
 
 # perl-5.40.1
@@ -1616,8 +1596,6 @@ ln -sv pkgconf.1 /usr/share/man/man1/pkg-config.1
 
 (lfs chroot) root:/sources/pkgconf-2.3.0# cd ..
 (lfs chroot) root:/sources# rm -rf pkgconf-2.3.0
-
-
 
 
 # Binutils-2.44
@@ -2350,7 +2328,6 @@ install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 (lfs chroot) root:/sources# rm -rf findutils-4.10.0
 
 
-
 # Groff-1.23.0
 (lfs chroot) root:/sources# tar -zxvf groff-1.23.0.tar.gz
 (lfs chroot) root:/sources# cd groff-1.23.0
@@ -2440,10 +2417,6 @@ install -vDm644 misc/zsh-completion  /usr/share/zsh/site-functions/_ninja
 (lfs chroot) root:/sources/tar-1.35# make -C doc install-html docdir=/usr/share/doc/tar-1.35
 (lfs chroot) root:/sources/tar-1.35# cd ..
 (lfs chroot) root:/sources# rm -rf tar-1.35
-
-
-
-
 
 
 
