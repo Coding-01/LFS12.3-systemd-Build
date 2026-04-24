@@ -987,6 +987,10 @@ EOF
 (lfs chroot) I have no name!:/# cat > /etc/bashrc << "EOF"
 # /etc/bashrc
 
+# 核心: 定义完整的PATH路径
+# 包含sbin目录，否则root用户无法直接执行管理命令
+export PATH=/usr/bin:/usr/sbin:/bin:/sbin
+
 # 颜色定义
 CYAN='\[\e[36m\]'
 GREEN='\[\e[32m\]'
