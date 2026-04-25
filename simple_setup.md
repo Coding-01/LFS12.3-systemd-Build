@@ -3,6 +3,8 @@
 
 ## 安装openssh
 ```shell
+现在已经进来了LFS中，即在LFS中操作
+
 # 在LFS中安装libedit
 tar -zxvf libedit-20251016-3.1.tar.gz
 cd libedit-20251016-3.1
