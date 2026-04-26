@@ -326,12 +326,15 @@ https://www.thrysoee.dk/editline/libedit-20251016-3.1.tar.gz
 如果需要创建好的LFS有更多的功能，需要单独下载并安装包，这里就只做备用和测试
 openssh-10.1p1.tar.gz中的p1代表Portable，这是 Linux 系统专用的版本
 
+wget https://mirrors.aliyun.com/gnu/wget/wget2-2.2.1.tar.gz
+
+
 # =====================================================================
 
 
 # 这是官方提供的包
-rambo@ub24-1:/mnt/lfs/sources$ wget https://www.linuxfromscratch.org/lfs/view/12.3-systemd/wget-list-systemd    https://www.linuxfromscratch.org/lfs/view/12.3-systemd/md5sums
-
+rambo@ub24-1:/mnt/lfs/sources$ wget https://www.linuxfromscratch.org/lfs/view/12.3-systemd/wget-list-systemd \
+https://www.linuxfromscratch.org/lfs/view/12.3-systemd/md5sums
 
 rambo@ub24-1:/mnt/lfs/sources$ wget --input-file=wget-list-systemd --continue --directory-prefix=$LFS/sources
 注意：请在干净的网络环境下进行，如使用了特殊网络则需要先去除
@@ -400,6 +403,11 @@ lfs@ub24-1:/mnt/lfs/sources$ mkdir -pv $LFS/etc
 lfs@ub24-1:/mnt/lfs/sources$ cat > ~/.bash_profile << "EOF"
 exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
 EOF
+释义:
+\u:用户名 
+\h:主机名
+\w：代表当前完整的工作路径(Working Directory)
+\W：只代表当前目录的最后一级
 
 
 lfs@ub24-1:/mnt/lfs/sources$ cat > ~/.bashrc << "EOF"
@@ -3078,6 +3086,9 @@ PS1='(lfs chroot) \u:\w\$ ' PATH=/usr/bin:/usr/sbin /bin/bash --login
 
 
 # 核心配置阶段 (make menuconfig)
+内核配置中有个"依赖项陷阱"。在 menuconfig 中，如果一个选项的前提条件没有被满足，该选项就会被隐藏，即使你直接搜索能看到它，进入菜单后也是找不到的
+Depends on: (它依赖哪些项)。如果某个依赖显示 [=n]，你就得先去把那个依赖项找出来开了，这一项才会出现
+
 运行 make menuconfig 后，会弹出一个蓝底菜单。在 VMware 中，请务必确保以下选项被编译进内核（状态为 [*] 而不是 <M>）：
 (lfs chroot) root:/sources/linux-6.13.4# make menuconfig
 [*] (星号)：表示驱动直接编译进内核二进制文件（bzImage）。内核启动时直接就有这些功能
